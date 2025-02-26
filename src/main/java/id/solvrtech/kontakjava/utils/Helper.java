@@ -54,7 +54,7 @@ public class Helper {
     }
 
     public static void showData(ArrayList<Person> persons) {
-        if(persons.size() != 0) {
+        if (persons.size() != 0) {
             int i = 1;
             for (Person person : persons) {
                 System.out.print(i + ". ");
@@ -66,6 +66,15 @@ public class Helper {
         } else {
             System.out.println("Empty Data!");
         }
+    }
+
+    public static boolean isPhoneNumberExits(ArrayList<Person> persons, String phoneNumber) {
+        for (Person person : persons) {
+            if (person.getPhoneNumber() == phoneNumber) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

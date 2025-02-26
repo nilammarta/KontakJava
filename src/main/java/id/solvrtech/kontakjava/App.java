@@ -26,7 +26,7 @@ public class App {
     // run method
     public void run() {
         // create new InMemoryPersonRepository
-        InMemoryPersonRepository repository = new InMemoryPersonRepository();
+//        InMemoryPersonRepository repository = new InMemoryPersonRepository();
         // create new personService
         PersonService  personService = new PersonService();
 
@@ -38,27 +38,13 @@ public class App {
 
             if (menuChoice == 1) {
                 System.out.println("=== ALL KONTAK PERSONS ===");
-                ArrayList<Person> persons = repository.getAll();
-
-//                if(persons.size() != 0) {
-//                    int i = 1;
-//                    for (Person person : persons) {
-//                        System.out.print(i + ". ");
-//                        System.out.println("Name        : " + person.getName());
-//                        System.out.println("   Phone number: " + person.getPhoneNumber());
-//                        System.out.println(" ");
-//                        i++;
-//                    }
-//                } else {
-//                    System.out.println("Empty Data!");
-//                }
+                ArrayList<Person> persons = personService.getAll();
                 showData(persons);
 
                 pressEnterToContinue();
 
             }else if (menuChoice == 2) {
                 System.out.println("=== CREATE NEW PERSON ===");
-
 
                 boolean valid = true;
                 while (valid) {
@@ -69,14 +55,15 @@ public class App {
                             String phoneNumber = readInputAsString("Phone number: ");
 
                             if (isInputNumeric(phoneNumber)) {
-                                Person newPerson = personService.create(repository.getAll(), name, phoneNumber);
-                                repository.create(newPerson);
+                                personService.create(name, phoneNumber);
 
                                 System.out.println(" ");
                                 System.out.println("New person has been created!");
 
                                 valid = false;
-                            } else {
+                            } else if (isPhoneNumberExits(personService.getAll(), phoneNumber)) {
+                                System.out.println("Your phone number is already exists!");
+                            }else {
                                 System.out.println("Invalid phone number!");
                                 System.out.println(" ");
                             }
@@ -91,11 +78,9 @@ public class App {
 
             }else if (menuChoice == 3) {
                 System.out.println("=== EDIT PERSON ===");
-                ArrayList<Person> persons = repository.getAll();
-                showData(persons);
+                showData(personService.getAll());
 
                 int editPerson = readInputAsInt("Choose a person to edit: ");
-
 
 
             }

@@ -12,9 +12,6 @@ public class InMemoryPersonRepository implements PersonRepository {
     // create the variable with type ArrayList of persons
     private final ArrayList<Person> persons = new ArrayList<>();
 
-    // create new Person Service
-    private PersonService personService = new PersonService();
-
 
     // implement all abstract method on interface
     public ArrayList<Person> getAll() {
@@ -22,7 +19,10 @@ public class InMemoryPersonRepository implements PersonRepository {
     }
 
     public Person getById(int id) {
-        return personService.getById(persons, id);
+
+        // Menggunakan method stream dengan filter() utnuk mendapatklan obejct pertama yang cocok ddengan id.
+        // dan akan mengembalikan data person yang ditemukan pertama atau null jika tidak ditemukan datanya
+        return persons.stream().filter(person -> person.getId() == id).findFirst().orElse(null);
     }
 
     public ArrayList<Person> getByName(String name) {
@@ -40,10 +40,10 @@ public class InMemoryPersonRepository implements PersonRepository {
         return person;
     }
 
-    public Person update(Person personEdit) {
-        Person person = getById(personEdit.getId());
-        person.setName(personEdit.getName());
-        person.setPhoneNumber(personEdit.getPhoneNumber());
+    public Person update(Person person) {
+        Person personEdit = getById(person.getId());
+        personEdit.setName(person.getName());
+        personEdit.setPhoneNumber(person.getPhoneNumber());
         return person;
     }
 

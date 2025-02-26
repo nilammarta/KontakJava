@@ -5,11 +5,11 @@ package id.solvrtech.kontakjava.model;
  */
 public class Person {
     // id
-    int id;
+    private int id;
     // name
-    String name;
+    private String name;
     // phone number
-    String phoneNumber;
+    private String phoneNumber;
 
     public int getId() {
         return id;
