@@ -40,8 +40,10 @@ public class InMemoryPersonRepository implements PersonRepository {
         return person;
     }
 
-    public Person update(Person person) {
-        persons.remove(person);
+    public Person update(Person personEdit) {
+        Person person = getById(personEdit.getId());
+        person.setName(personEdit.getName());
+        person.setPhoneNumber(personEdit.getPhoneNumber());
         return person;
     }
 

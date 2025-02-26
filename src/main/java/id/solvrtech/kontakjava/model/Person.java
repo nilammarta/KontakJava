@@ -9,7 +9,7 @@ public class Person {
     // name
     String name;
     // phone number
-    int phoneNumber;
+    String phoneNumber;
 
     public int getId() {
         return id;
@@ -17,7 +17,7 @@ public class Person {
     public String getName() {
         return name;
     }
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
@@ -27,7 +27,7 @@ public class Person {
     public void setName(String name) {
         this.name = name;
     }
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 }

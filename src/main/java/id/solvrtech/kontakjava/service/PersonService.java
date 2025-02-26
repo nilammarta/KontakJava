@@ -20,7 +20,7 @@ public class PersonService {
     }
 
     // logic of create
-    public Person create(ArrayList<Person> persons, String name, int phoneNumber) {
+    public Person create(ArrayList<Person> persons, String name, String phoneNumber) {
 
         Person newPerson = new Person();
 
@@ -35,6 +35,10 @@ public class PersonService {
 
         return newPerson;
     }
+
     // logic of update
+//    public Person update(Person personEdit, String newName, String newPhoneNumber) {
+//
+//    }
     // logic of delete
 }

@@ -40,23 +40,64 @@ public class App {
                 System.out.println("=== ALL KONTAK PERSONS ===");
                 ArrayList<Person> persons = repository.getAll();
 
-                for (Person person : persons) {
-                    System.out.println("Name: " + person.getName());
-                    System.out.println("Phone number: " + person.getPhoneNumber());
-                    System.out.println(" ");
-                }
+//                if(persons.size() != 0) {
+//                    int i = 1;
+//                    for (Person person : persons) {
+//                        System.out.print(i + ". ");
+//                        System.out.println("Name        : " + person.getName());
+//                        System.out.println("   Phone number: " + person.getPhoneNumber());
+//                        System.out.println(" ");
+//                        i++;
+//                    }
+//                } else {
+//                    System.out.println("Empty Data!");
+//                }
+                showData(persons);
+
+                pressEnterToContinue();
 
             }else if (menuChoice == 2) {
                 System.out.println("=== CREATE NEW PERSON ===");
 
-                String name = readInputAsString("Name: ");
-                int phoneNumber = readInputAsInt("Phone number: ");
 
-                Person newPerson = personService.create(repository.getAll(), name, phoneNumber);
-                repository.create(newPerson);
+                boolean valid = true;
+                while (valid) {
+                    String name = readInputAsString("Name: ");
 
-                System.out.println("New person has been created!");
+                    if (!name.isEmpty()) {
+                        while (valid) {
+                            String phoneNumber = readInputAsString("Phone number: ");
+
+                            if (isInputNumeric(phoneNumber)) {
+                                Person newPerson = personService.create(repository.getAll(), name, phoneNumber);
+                                repository.create(newPerson);
+
+                                System.out.println(" ");
+                                System.out.println("New person has been created!");
+
+                                valid = false;
+                            } else {
+                                System.out.println("Invalid phone number!");
+                                System.out.println(" ");
+                            }
+                        }
+                    }else {
+                        System.out.println("Invalid name!");
+                        System.out.println(" ");
+                    }
+                }
+
                 pressEnterToContinue();
+
+            }else if (menuChoice == 3) {
+                System.out.println("=== EDIT PERSON ===");
+                ArrayList<Person> persons = repository.getAll();
+                showData(persons);
+
+                int editPerson = readInputAsInt("Choose a person to edit: ");
+
+
+
             }
         }
     }
