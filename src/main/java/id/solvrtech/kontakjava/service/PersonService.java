@@ -27,12 +27,6 @@ public class PersonService {
 
         Person newPerson = new Person();
 
-        if (personRepository.getAll().size() == 0) {
-            newPerson.setId(1);
-        }else {
-            newPerson.setId(personRepository.getAll().getLast().getId() + 1);
-        }
-
         newPerson.setName(name);
 
         newPerson.setPhoneNumber(phoneNumber);

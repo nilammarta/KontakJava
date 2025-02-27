@@ -121,9 +121,13 @@ public class App {
                 }else{
                     pressEnterToContinue();
                 }
-                
+
             }else if (menuChoice == 4) {
                 System.out.println("=== DELETE PERSON ===");
+            }else if (menuChoice == 5) {
+                System.out.println("=== EXIT ===");
+                System.out.println("See you soon!");
+                break;
             }
         }
     }

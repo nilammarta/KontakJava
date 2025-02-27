@@ -36,6 +36,12 @@ public class InMemoryPersonRepository implements PersonRepository {
     }
 
     public Person create(Person person) {
+        if (persons.size() == 0) {
+            person.setId(1);
+        }else {
+            person.setId(persons.getLast().getId() + 1);
+        }
+
         persons.add(person);
         return person;
     }
