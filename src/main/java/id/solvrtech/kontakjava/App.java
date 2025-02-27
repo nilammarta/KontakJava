@@ -28,7 +28,7 @@ public class App {
         // create new InMemoryPersonRepository
 //        InMemoryPersonRepository repository = new InMemoryPersonRepository();
         // create new personService
-        PersonService  personService = new PersonService();
+        PersonService personService = new PersonService();
 
         while (true) {
             // call the showMenu method
@@ -43,7 +43,7 @@ public class App {
 
                 pressEnterToContinue();
 
-            }else if (menuChoice == 2) {
+            } else if (menuChoice == 2) {
                 System.out.println("=== CREATE NEW PERSON ===");
 
                 boolean valid = true;
@@ -54,21 +54,22 @@ public class App {
                         while (valid) {
                             String phoneNumber = readInputAsString("Phone number: ");
 
-                            if (isInputNumeric(phoneNumber)) {
+                            if (isPhoneNumberExits(personService.getAll(), phoneNumber) == true) {
+                                System.out.println("Your phone number is already exists, please input another number!");
+
+                            } else if (isInputNumeric(phoneNumber)) {
                                 personService.create(name, phoneNumber);
 
                                 System.out.println(" ");
                                 System.out.println("New person has been created!");
 
                                 valid = false;
-                            } else if (isPhoneNumberExits(personService.getAll(), phoneNumber)) {
-                                System.out.println("Your phone number is already exists!");
-                            }else {
+                            } else {
                                 System.out.println("Invalid phone number!");
                                 System.out.println(" ");
                             }
                         }
-                    }else {
+                    } else {
                         System.out.println("Invalid name!");
                         System.out.println(" ");
                     }
@@ -76,13 +77,53 @@ public class App {
 
                 pressEnterToContinue();
 
-            }else if (menuChoice == 3) {
+            } else if (menuChoice == 3) {
                 System.out.println("=== EDIT PERSON ===");
-                showData(personService.getAll());
+                ArrayList<Person> persons = showData(personService.getAll());
 
-                int editPerson = readInputAsInt("Choose a person to edit: ");
+                if (persons.size() != 0) {
+                    int editPerson = readInputAsInt("Choose a person to edit: ");
+                    Person thePerson = persons.get((editPerson - 1));
 
+                    // cek apakah data sudah benar
+                    System.out.println(thePerson.getName() + ": " + thePerson.getPhoneNumber());
 
+                    if (thePerson != null) {
+                        System.out.println("=== INPUT NEW DATA ===");
+                        boolean valid = true;
+                        while (valid) {
+                            String newName = readInputAsString("Name: ");
+
+                            if (!newName.isEmpty()) {
+                                while (valid) {
+                                    String newPhoneNumber = readInputAsString("Phone number: ");
+
+                                    // validasi jika ada number yang sama dengan data yang lain
+                                    if (isPhoneNumberExits(personService.getAll(), newPhoneNumber, thePerson.getId()) == true) {
+                                        System.out.println("Your phone number is already exists, please input another number!");
+                                    } else if (isInputNumeric(newPhoneNumber)) {
+                                        personService.update(thePerson, newName, newPhoneNumber);
+                                        System.out.println(" ");
+                                        System.out.println("New person has been updated!");
+                                        pressEnterToContinue();
+                                        valid = false;
+                                    } else {
+                                        System.out.println("Invalid phone number!");
+                                    }
+
+                                }
+                            }
+                        }
+                    } else {
+                        System.out.println("Person data not found!");
+                        System.out.println(" ");
+                    }
+                }else{
+                    pressEnterToContinue();
+                }
+                
+            }else if (menuChoice == 4) {
+                System.out.println("=== DELETE PERSON ===");
             }
         }
     }

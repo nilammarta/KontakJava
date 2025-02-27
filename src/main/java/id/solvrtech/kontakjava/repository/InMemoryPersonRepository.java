@@ -42,8 +42,8 @@ public class InMemoryPersonRepository implements PersonRepository {
 
     public Person update(Person person) {
         Person personEdit = getById(person.getId());
-        personEdit.setName(person.getName());
-        personEdit.setPhoneNumber(person.getPhoneNumber());
+        int index = persons.indexOf(personEdit);
+        persons.set(index, person);
         return person;
     }
 

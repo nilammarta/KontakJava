@@ -19,13 +19,6 @@ public class PersonService {
 
     // get the person daya based on their id
     public Person getById(int id) {
-//        ArrayList<Person> persons = personRepository.getAll();
-//        for (Person person : persons) {
-//            if (person.getId() == id) {
-//                return person;
-//            }
-//        }
-//        return null;
         return personRepository.getById(id);
     }
 
@@ -35,9 +28,9 @@ public class PersonService {
         Person newPerson = new Person();
 
         if (personRepository.getAll().size() == 0) {
-            newPerson.setId(0);
+            newPerson.setId(1);
         }else {
-            newPerson.setId(personRepository.getAll().size() - 1);
+            newPerson.setId(personRepository.getAll().getLast().getId() + 1);
         }
 
         newPerson.setName(name);
@@ -60,4 +53,5 @@ public class PersonService {
 
     }
     // logic of delete
+
 }

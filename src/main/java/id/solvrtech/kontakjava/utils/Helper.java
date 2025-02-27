@@ -3,6 +3,7 @@ package id.solvrtech.kontakjava.utils;
 import id.solvrtech.kontakjava.model.Person;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 /**
@@ -28,6 +29,7 @@ public class Helper {
             Scanner scanner = new Scanner(System.in);
             System.out.print(message);
             String input = scanner.nextLine();
+            System.out.println(" ");
 
             return Integer.parseInt(input);
         } catch (Exception e) {
@@ -53,7 +55,7 @@ public class Helper {
         }
     }
 
-    public static void showData(ArrayList<Person> persons) {
+    public static ArrayList<Person> showData(ArrayList<Person> persons) {
         if (persons.size() != 0) {
             int i = 1;
             for (Person person : persons) {
@@ -66,11 +68,23 @@ public class Helper {
         } else {
             System.out.println("Empty Data!");
         }
+
+        return persons;
     }
 
     public static boolean isPhoneNumberExits(ArrayList<Person> persons, String phoneNumber) {
         for (Person person : persons) {
-            if (person.getPhoneNumber() == phoneNumber) {
+            if (Objects.equals(person.getPhoneNumber(), phoneNumber)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // overloading isPhoneNumberExits untuk bagian edit person
+    public static boolean isPhoneNumberExits(ArrayList<Person> persons, String phoneNumber, int id) {
+        for (Person person : persons) {
+            if (Objects.equals(person.getPhoneNumber(), phoneNumber) && !Objects.equals(person.getId(), id)) {
                 return true;
             }
         }
