@@ -17,7 +17,7 @@ public class Helper {
             System.out.print(message);
             return scanner.nextLine();
         } catch (Exception e) {
-            System.err.println("Error while reading input");
+            System.err.println("Error while reading input!");
             pressEnterToContinue();
             return "";
         }
@@ -33,7 +33,7 @@ public class Helper {
 
             return Integer.parseInt(input);
         } catch (Exception e) {
-            System.out.println("Error while reading input");
+            System.out.println("Error while reading input!");
             pressEnterToContinue();
             return -1;
         }
@@ -56,11 +56,12 @@ public class Helper {
     }
 
     public static ArrayList<Person> showData(ArrayList<Person> persons) {
-        if (persons.size() != 0) {
+        if (persons != null && persons.size() != 0) {
             int i = 1;
             for (Person person : persons) {
                 System.out.print(i + ". ");
-                System.out.println("Name        : " + person.getName());
+                System.out.println("Id          : " + person.getId());
+                System.out.println("   Name        : " + person.getName());
                 System.out.println("   Phone number: " + person.getPhoneNumber());
                 System.out.println(" ");
                 i++;

@@ -25,7 +25,7 @@ public class PersonService {
     // logic of create
     public Person create(String name, String phoneNumber) {
 
-        Person newPerson = new Person();
+        Person newPerson = new Person(name, phoneNumber);
 
         newPerson.setName(name);
 
@@ -41,11 +41,29 @@ public class PersonService {
         personEdit.setName(newName);
         personEdit.setPhoneNumber(newPhoneNumber);
 
-        // check if phone number is exitst
-
         return personRepository.update(personEdit);
-
     }
-    // logic of delete
 
+    // logic of delete
+    public String delete(int id) {
+        try {
+            personRepository.deleteById(id);
+            return "Person data deleted successfully!";
+        }catch (Exception e) {
+            return "Person data could not be deleted!";
+        }
+    }
+
+    public ArrayList<Person> searchPerson(String searchInput) {
+        ArrayList<Person> personsByName = personRepository.getByName(searchInput);
+        ArrayList<Person> personsByPhoneNumber = personRepository.getByPhone(searchInput);
+
+        if (personsByName.isEmpty() && personsByPhoneNumber.isEmpty()) {
+            return null;
+        }else if (!personsByPhoneNumber.isEmpty()) {
+            return personsByPhoneNumber;
+        }else{
+            return personsByName;
+        }
+    }
 }

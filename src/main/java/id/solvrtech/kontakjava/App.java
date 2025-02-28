@@ -1,11 +1,9 @@
 package id.solvrtech.kontakjava;
 
 import id.solvrtech.kontakjava.model.Person;
-import id.solvrtech.kontakjava.repository.InMemoryPersonRepository;
 import id.solvrtech.kontakjava.service.PersonService;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import static id.solvrtech.kontakjava.utils.Helper.*;
 
@@ -17,16 +15,15 @@ public class App {
     public void showMenu() {
         System.out.println("=== KONTAK JAVA ===");
         System.out.println("1. Show All Persons");
-        System.out.println("2. Create New Person");
-        System.out.println("3. Edit Person");
-        System.out.println("4. Delete Person");
-        System.out.println("5. Exit");
+        System.out.println("2. Search Person");
+        System.out.println("3. Create New Person");
+        System.out.println("4. Edit Person");
+        System.out.println("5. Delete Person");
+        System.out.println("6. Exit");
     }
 
     // run method
     public void run() {
-        // create new InMemoryPersonRepository
-//        InMemoryPersonRepository repository = new InMemoryPersonRepository();
         // create new personService
         PersonService personService = new PersonService();
 
@@ -44,6 +41,19 @@ public class App {
                 pressEnterToContinue();
 
             } else if (menuChoice == 2) {
+                System.out.println("=== SEARCH PERSON ===");
+                String searchInput = readInputAsString("Enter your name or your: ");
+
+                ArrayList<Person> searchResult = personService.searchPerson(searchInput);
+                if (searchInput != null) {
+                    showData(searchResult);
+                    pressEnterToContinue();
+                }else{
+                    System.out.println("Search not found!");
+                    pressEnterToContinue();
+                }
+
+            } else if (menuChoice == 3) {
                 System.out.println("=== CREATE NEW PERSON ===");
 
                 boolean valid = true;
@@ -77,18 +87,22 @@ public class App {
 
                 pressEnterToContinue();
 
-            } else if (menuChoice == 3) {
+            } else if (menuChoice == 4) {
                 System.out.println("=== EDIT PERSON ===");
                 ArrayList<Person> persons = showData(personService.getAll());
 
                 if (persons.size() != 0) {
-                    int editPerson = readInputAsInt("Choose a person to edit: ");
-                    Person thePerson = persons.get((editPerson - 1));
+                    int id = readInputAsInt("Choose the ID of the person to edit: ");
 
-                    // cek apakah data sudah benar
-                    System.out.println(thePerson.getName() + ": " + thePerson.getPhoneNumber());
+                    Person thePerson = personService.getById(id);
 
                     if (thePerson != null) {
+                        // Tampilkan data yang sudah dipilih
+                        System.out.println("=== Person Data ===");
+                        System.out.println("Nama         : " + thePerson.getName());
+                        System.out.println("Phone number : " + thePerson.getPhoneNumber());
+                        System.out.println(" ");
+
                         System.out.println("=== INPUT NEW DATA ===");
                         boolean valid = true;
                         while (valid) {
@@ -110,24 +124,50 @@ public class App {
                                     } else {
                                         System.out.println("Invalid phone number!");
                                     }
-
                                 }
                             }
                         }
                     } else {
                         System.out.println("Person data not found!");
-                        System.out.println(" ");
+                        pressEnterToContinue();
                     }
                 }else{
                     pressEnterToContinue();
                 }
 
-            }else if (menuChoice == 4) {
-                System.out.println("=== DELETE PERSON ===");
             }else if (menuChoice == 5) {
+                System.out.println("=== DELETE PERSON ===");
+                ArrayList<Person> persons = showData(personService.getAll());
+
+                if (persons.size() != 0) {
+                    int id = readInputAsInt("Choose the ID of the person to delete: ");
+                    Person thePerson = personService.getById(id);
+
+                    // Tampilkan data yang sudah dipilih
+                    System.out.println("=== Person Data ===");
+                    System.out.println("Nama         : " + thePerson.getName());
+                    System.out.println("Phone number : " + thePerson.getPhoneNumber());
+                    System.out.println(" ");
+                    String confirm = readInputAsString("Are you sure you want to delete this person? (y/n): ");
+
+                    if (confirm.equals("y")) {
+                        String deleted = personService.delete(id);
+                        System.out.println(deleted);
+                        System.out.println(" ");
+                    } else if (confirm.equals("n")) {
+                        System.out.println("Cancel deletion!");
+                    } else {
+                        System.out.println("Please input 'y' or 'n' to continue!");
+                    }
+                }
+
+            }else if (menuChoice == 6) {
                 System.out.println("=== EXIT ===");
                 System.out.println("See you soon!");
                 break;
+            }else {
+                System.out.println("PLease input the correct option!");
+                pressEnterToContinue();
             }
         }
     }
