@@ -2,6 +2,7 @@ package id.solvrtech.kontakjava.service;
 
 import id.solvrtech.kontakjava.model.Person;
 import id.solvrtech.kontakjava.repository.InMemoryPersonRepository;
+import id.solvrtech.kontakjava.repository.MySqlPersonRepository;
 import id.solvrtech.kontakjava.repository.PersonRepository;
 
 import java.util.ArrayList;
@@ -11,7 +12,8 @@ import java.util.ArrayList;
  */
 public class PersonService {
 
-    private PersonRepository personRepository = new InMemoryPersonRepository();
+//    private PersonRepository personRepository = new InMemoryPersonRepository();
+    private final PersonRepository personRepository = new MySqlPersonRepository();
 
     public ArrayList<Person> getAll() {
         return personRepository.getAll();

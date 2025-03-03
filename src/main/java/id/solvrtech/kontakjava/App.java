@@ -1,11 +1,14 @@
 package id.solvrtech.kontakjava;
 
+import id.solvrtech.kontakjava.utils.MysqlConnection;
 import id.solvrtech.kontakjava.model.Person;
 import id.solvrtech.kontakjava.service.PersonService;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import static id.solvrtech.kontakjava.utils.Helper.*;
+import static id.solvrtech.kontakjava.utils.MysqlConnection.getConnection;
 
 /**
  * class for run menu of kontak java app
@@ -27,11 +30,12 @@ public class App {
         // create new personService
         PersonService personService = new PersonService();
 
+
         while (true) {
             // call the showMenu method
             showMenu();
 
-            Integer menuChoice = readInputAsInt("Your choice: ");
+            int menuChoice = readInputAsInt("Your choice: ");
 
             if (menuChoice == 1) {
                 System.out.println("=== ALL KONTAK PERSONS ===");

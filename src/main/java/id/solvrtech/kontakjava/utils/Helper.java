@@ -2,6 +2,8 @@ package id.solvrtech.kontakjava.utils;
 
 import id.solvrtech.kontakjava.model.Person;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
@@ -90,6 +92,18 @@ public class Helper {
             }
         }
         return false;
+    }
+
+    public static ArrayList<Person> covertResultSetToList(ResultSet resultSet) throws SQLException {
+        ArrayList<Person> persons = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String name = resultSet.getString("name");
+            String phoneNumber = resultSet.getString("phone");
+            persons.add(new Person(name, phoneNumber));
+            return persons;
+        }
+        return persons;
     }
 
 }
