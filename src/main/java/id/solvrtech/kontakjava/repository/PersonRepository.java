@@ -3,18 +3,20 @@ package id.solvrtech.kontakjava.repository;
 import id.solvrtech.kontakjava.model.Person;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * interface for persons repository
  */
 public interface PersonRepository {
-    ArrayList<Person> getAll();
+    List<Person> getAll();
 
     Person getById(int id);
 
-    ArrayList<Person> getByName(String name);
+    List<Person> getByName(String name);
 
-    ArrayList<Person> getByPhone(String phone);
+    List<Person> getByPhone(String phone);
 
     Person create(Person person);
 
@@ -22,4 +24,8 @@ public interface PersonRepository {
 
     void deleteById(int id);
 
+    boolean isPhoneNumberExists(String phoneNumber);
+
+    // overloading isPhoneNumberExists untuk bagian edit person
+    boolean isPhoneNumberExists(String phoneNumber, int id);
 }

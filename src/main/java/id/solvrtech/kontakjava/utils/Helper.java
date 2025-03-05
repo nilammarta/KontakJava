@@ -5,6 +5,7 @@ import id.solvrtech.kontakjava.model.Person;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -57,7 +58,7 @@ public class Helper {
         }
     }
 
-    public static ArrayList<Person> showData(ArrayList<Person> persons) {
+    public static List<Person> showData(List<Person> persons) {
         if (persons != null && persons.size() != 0) {
             int i = 1;
             for (Person person : persons) {
@@ -72,37 +73,6 @@ public class Helper {
             System.out.println("Empty Data!");
         }
 
-        return persons;
-    }
-
-    public static boolean isPhoneNumberExits(ArrayList<Person> persons, String phoneNumber) {
-        for (Person person : persons) {
-            if (Objects.equals(person.getPhoneNumber(), phoneNumber)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // overloading isPhoneNumberExits untuk bagian edit person
-    public static boolean isPhoneNumberExits(ArrayList<Person> persons, String phoneNumber, int id) {
-        for (Person person : persons) {
-            if (Objects.equals(person.getPhoneNumber(), phoneNumber) && !Objects.equals(person.getId(), id)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static ArrayList<Person> covertResultSetToList(ResultSet resultSet) throws SQLException {
-        ArrayList<Person> persons = new ArrayList<>();
-        while (resultSet.next()) {
-            int id = resultSet.getInt("id");
-            String name = resultSet.getString("name");
-            String phoneNumber = resultSet.getString("phone");
-            persons.add(new Person(name, phoneNumber));
-            return persons;
-        }
         return persons;
     }
 

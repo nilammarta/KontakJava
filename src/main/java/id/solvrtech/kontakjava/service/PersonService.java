@@ -2,20 +2,25 @@ package id.solvrtech.kontakjava.service;
 
 import id.solvrtech.kontakjava.model.Person;
 import id.solvrtech.kontakjava.repository.InMemoryPersonRepository;
-import id.solvrtech.kontakjava.repository.MySqlPersonRepository;
+//import id.solvrtech.kontakjava.repository.MySqlPersonRepository;
 import id.solvrtech.kontakjava.repository.PersonRepository;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * class person service to create CRUD logic of person data
  */
 public class PersonService {
 
-//    private PersonRepository personRepository = new InMemoryPersonRepository();
-    private final PersonRepository personRepository = new MySqlPersonRepository();
+    // Dengan menyimpan data di array list
+    private PersonRepository personRepository = new InMemoryPersonRepository();
 
-    public ArrayList<Person> getAll() {
+//     Dengan menyimpan data di database
+//    private final PersonRepository personRepository = new MySqlPersonRepository();
+
+    public List<Person> getAll() {
         return personRepository.getAll();
     }
 
@@ -27,12 +32,14 @@ public class PersonService {
     // logic of create
     public Person create(String name, String phoneNumber) {
 
+        if (personRepository.isPhoneNumberExists(phoneNumber)) {
+            return null;
+        } else {
+
+        }
         Person newPerson = new Person(name, phoneNumber);
-
         newPerson.setName(name);
-
         newPerson.setPhoneNumber(phoneNumber);
-
         personRepository.create(newPerson);
 
         return newPerson;
@@ -40,6 +47,10 @@ public class PersonService {
 
     // logic of update
     public Person update(Person personEdit, String newName, String newPhoneNumber) {
+
+        if (personRepository.isPhoneNumberExists(newPhoneNumber, personEdit.getId())) {
+            return null;
+        }
         personEdit.setName(newName);
         personEdit.setPhoneNumber(newPhoneNumber);
 
@@ -56,9 +67,9 @@ public class PersonService {
         }
     }
 
-    public ArrayList<Person> searchPerson(String searchInput) {
-        ArrayList<Person> personsByName = personRepository.getByName(searchInput);
-        ArrayList<Person> personsByPhoneNumber = personRepository.getByPhone(searchInput);
+    public List<Person> searchPerson(String searchInput) {
+        List<Person> personsByName = personRepository.getByName(searchInput);
+        List<Person> personsByPhoneNumber = personRepository.getByPhone(searchInput);
 
         if (personsByName.isEmpty() && personsByPhoneNumber.isEmpty()) {
             return null;

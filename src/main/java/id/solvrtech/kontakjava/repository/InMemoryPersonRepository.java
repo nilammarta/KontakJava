@@ -3,18 +3,20 @@ package id.solvrtech.kontakjava.repository;
 import id.solvrtech.kontakjava.model.Person;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
  * class implementation of person repository, and storing the persons data in ArrayList
  */
 public class InMemoryPersonRepository implements PersonRepository {
-    // create the variable with type ArrayList of persons
-    private final ArrayList<Person> persons = new ArrayList<>();
+    // create the variable with type List of persons
+    private final List<Person> persons = new ArrayList<Person>();
 
 
     // implement all abstract method on interface
-    public ArrayList<Person> getAll() {
+    public List<Person> getAll() {
         return persons;
     }
 
@@ -25,14 +27,14 @@ public class InMemoryPersonRepository implements PersonRepository {
         return persons.stream().filter(person -> person.getId() == id).findFirst().orElse(null);
     }
 
-    public ArrayList<Person> getByName(String name) {
+    public List<Person> getByName(String name) {
         return persons.stream()
                 .filter(person -> person.getName().toLowerCase().contains(name.toLowerCase()))
                 .collect(Collectors.toCollection(ArrayList::new));
 
     }
 
-    public ArrayList<Person> getByPhone(String phone) {
+    public List<Person> getByPhone(String phone) {
         return persons.stream()
                 .filter(person -> person.getPhoneNumber().toLowerCase().contains(phone.toLowerCase()))
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -58,5 +60,24 @@ public class InMemoryPersonRepository implements PersonRepository {
 
     public void deleteById(int id) {
         persons.removeIf(person -> person.getId() == id);
+    }
+
+    public boolean isPhoneNumberExists(String phoneNumber) {
+        for (Person person : persons) {
+            if (Objects.equals(person.getPhoneNumber(), phoneNumber)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public boolean isPhoneNumberExists(String phoneNumber, int id) {
+        for (Person person : persons) {
+            if (Objects.equals(person.getPhoneNumber(), phoneNumber) && !Objects.equals(person.getId(), id)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
