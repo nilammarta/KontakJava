@@ -1,15 +1,11 @@
 package id.solvrtech.kontakjava;
 
-import id.solvrtech.kontakjava.utils.MysqlConnection;
 import id.solvrtech.kontakjava.model.Person;
 import id.solvrtech.kontakjava.service.PersonService;
 
-import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 
 import static id.solvrtech.kontakjava.utils.Helper.*;
-import static id.solvrtech.kontakjava.utils.MysqlConnection.getConnection;
 
 /**
  * class for run menu of kontak java app

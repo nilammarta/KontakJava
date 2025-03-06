@@ -3,6 +3,7 @@ package id.solvrtech.kontakjava.service;
 import id.solvrtech.kontakjava.model.Person;
 import id.solvrtech.kontakjava.repository.InMemoryPersonRepository;
 //import id.solvrtech.kontakjava.repository.MySqlPersonRepository;
+import id.solvrtech.kontakjava.repository.MySqlPersonRepository;
 import id.solvrtech.kontakjava.repository.PersonRepository;
 
 import java.util.ArrayList;
@@ -15,10 +16,10 @@ import java.util.Objects;
 public class PersonService {
 
     // Dengan menyimpan data di array list
-    private PersonRepository personRepository = new InMemoryPersonRepository();
+//    private PersonRepository personRepository = new InMemoryPersonRepository();
 
 //     Dengan menyimpan data di database
-//    private final PersonRepository personRepository = new MySqlPersonRepository();
+    private final PersonRepository personRepository = new MySqlPersonRepository();
 
     public List<Person> getAll() {
         return personRepository.getAll();
