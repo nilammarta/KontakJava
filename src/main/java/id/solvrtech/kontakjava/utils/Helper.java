@@ -37,7 +37,6 @@ public class Helper {
             return Integer.parseInt(input);
         } catch (Exception e) {
             System.out.println("Error while reading input!");
-            pressEnterToContinue();
             return -1;
         }
     }

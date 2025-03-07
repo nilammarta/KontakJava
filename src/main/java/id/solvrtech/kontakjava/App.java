@@ -96,47 +96,47 @@ public class App {
                 if (persons.size() != 0) {
                     int id = readInputAsInt("Choose the ID of the person to edit: ");
 
-                    Person thePerson = personService.getById(id);
+                        Person thePerson = personService.getById(id);
 
-                    if (thePerson != null) {
-                        // Tampilkan data yang sudah dipilih
-                        System.out.println("=== Person Data ===");
-                        System.out.println("Nama         : " + thePerson.getName());
-                        System.out.println("Phone number : " + thePerson.getPhoneNumber());
-                        System.out.println(" ");
+                        if (thePerson != null) {
+                            // Tampilkan data yang sudah dipilih
+                            System.out.println("=== Person Data ===");
+                            System.out.println("Nama         : " + thePerson.getName());
+                            System.out.println("Phone number : " + thePerson.getPhoneNumber());
+                            System.out.println(" ");
 
-                        System.out.println("=== INPUT NEW DATA ===");
-                        boolean inValid = true;
-                        while (inValid) {
-                            String newName = readInputAsString("Name: ");
+                            System.out.println("=== INPUT NEW DATA ===");
+                            boolean inValid = true;
+                            while (inValid) {
+                                String newName = readInputAsString("Name: ");
 
-                            if (!newName.isEmpty()) {
-                                while (inValid) {
-                                    String newPhoneNumber = readInputAsString("Phone number: ");
+                                if (!newName.isEmpty()) {
+                                    while (inValid) {
+                                        String newPhoneNumber = readInputAsString("Phone number: ");
 
-                                    if (isInputNumeric(newPhoneNumber)) {
-                                        Person editData = personService.update(thePerson, newName, newPhoneNumber);
+                                        if (isInputNumeric(newPhoneNumber)) {
+                                            Person editData = personService.update(thePerson, newName, newPhoneNumber);
 
-                                        if (editData == null) {
-                                            System.out.println("Your phone number is already exists, please input another number!");
+                                            if (editData == null) {
+                                                System.out.println("Your phone number is already exists, please input another number!");
+                                            } else {
+                                                System.out.println(" ");
+
+                                                System.out.println("New person has been updated!");
+                                                pressEnterToContinue();
+
+                                                inValid = false;
+                                            }
                                         } else {
-                                            System.out.println(" ");
-
-                                            System.out.println("New person has been updated!");
-                                            pressEnterToContinue();
-
-                                            inValid = false;
+                                            System.out.println("Invalid phone number!");
                                         }
-                                    } else {
-                                        System.out.println("Invalid phone number!");
                                     }
                                 }
                             }
+                        } else {
+                            System.out.println("Person data not found!");
+                            pressEnterToContinue();
                         }
-                    } else {
-                        System.out.println("Person data not found!");
-                        pressEnterToContinue();
-                    }
                 } else {
                     pressEnterToContinue();
                 }
@@ -179,7 +179,7 @@ public class App {
                         System.out.println("Person data not found!");
                         pressEnterToContinue();
                     }
-                }else{
+                } else {
                     pressEnterToContinue();
                 }
             } else if (menuChoice == 6) {
@@ -188,7 +188,7 @@ public class App {
                 break;
             } else {
                 System.out.println("Please input the correct option!");
-                System.out.println(" ");
+                pressEnterToContinue();
             }
         }
     }
