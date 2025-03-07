@@ -16,6 +16,12 @@ public class Person {
         this.phoneNumber = phoneNumber;
     }
 
+    public Person(int id, String name, String phoneNumber) {
+        this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+    }
+
     public int getId() {
         return id;
     }

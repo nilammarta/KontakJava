@@ -32,8 +32,7 @@ public class MySqlPersonRepository implements PersonRepository {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
                 String phoneNumber = rs.getString("phone");
-                Person person = new Person(name, phoneNumber);
-                person.setId(id);
+                Person person = new Person(id, name, phoneNumber);
                 persons.add(person);
             }
 
@@ -65,8 +64,7 @@ public class MySqlPersonRepository implements PersonRepository {
             if (rs.next()) {
                 String name = rs.getString("name");
                 String phoneNumber = rs.getString("phone");
-                Person person = new Person(name, phoneNumber);
-                person.setId(personId);
+                Person person = new Person(personId, name, phoneNumber);
 
                 return person;
             }else{
@@ -103,9 +101,7 @@ public class MySqlPersonRepository implements PersonRepository {
                 String theName = rs.getString("name");
                 String phoneNumber = rs.getString("phone");
 
-                Person person = new Person(theName, phoneNumber);
-                person.setId(id);
-
+                Person person = new Person(id, theName, phoneNumber);
                 persons.add(person);
             }
             return persons;
@@ -139,8 +135,7 @@ public class MySqlPersonRepository implements PersonRepository {
                 String theName = rs.getString("name");
                 String phoneNumber = rs.getString("phone");
 
-                Person person = new Person(theName, phoneNumber);
-                person.setId(id);
+                Person person = new Person(id, theName, phoneNumber);
 
                 persons.add(person);
             }
@@ -166,12 +161,19 @@ public class MySqlPersonRepository implements PersonRepository {
         try {
             conn =mySqlconnection.createConnection();
             assert conn != null;
-            stmt = conn.prepareStatement(query);
+            stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, person.getName());
             stmt.setString(2, person.getPhoneNumber());
             stmt.executeUpdate();
 
-            return person;
+            rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                int id = rs.getInt(1);
+                person.setId(id);
+                return person;
+            }else{
+                return null;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
