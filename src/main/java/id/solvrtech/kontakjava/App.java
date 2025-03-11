@@ -64,7 +64,7 @@ public class App {
                         while (inValid) {
                             String phoneNumber = readInputAsString("Phone number: ");
 
-                            if (isInputNumeric(phoneNumber)) {
+                            if (validatePhoneNumber(phoneNumber)) {
                                 Person newData = personService.create(name, phoneNumber);
 
                                 if (newData == null) {
@@ -78,7 +78,7 @@ public class App {
                                     inValid = false;
                                 }
                             } else {
-                                System.out.println("Invalid phone number!");
+                                System.out.println("Invalid phone number, please input the correct phone number!");
                             }
                         }
                     } else {
@@ -114,7 +114,7 @@ public class App {
                                     while (inValid) {
                                         String newPhoneNumber = readInputAsString("Phone number: ");
 
-                                        if (isInputNumeric(newPhoneNumber)) {
+                                        if (validatePhoneNumber(newPhoneNumber)) {
                                             Person editData = personService.update(thePerson, newName, newPhoneNumber);
 
                                             if (editData == null) {
@@ -128,7 +128,7 @@ public class App {
                                                 inValid = false;
                                             }
                                         } else {
-                                            System.out.println("Invalid phone number!");
+                                            System.out.println("Invalid phone number, please input the correct phone number!");
                                         }
                                     }
                                 }

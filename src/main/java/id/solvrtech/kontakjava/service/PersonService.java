@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static id.solvrtech.kontakjava.utils.Helper.validatePhoneNumber;
+
 /**
  * class person service to create CRUD logic of person data
  */
@@ -36,14 +38,13 @@ public class PersonService {
         if (personRepository.isPhoneNumberExists(phoneNumber)) {
             return null;
         } else {
+            Person newPerson = new Person(name, phoneNumber);
+            newPerson.setName(name);
+            newPerson.setPhoneNumber(phoneNumber);
+            personRepository.create(newPerson);
 
+            return newPerson;
         }
-        Person newPerson = new Person(name, phoneNumber);
-        newPerson.setName(name);
-        newPerson.setPhoneNumber(phoneNumber);
-        personRepository.create(newPerson);
-
-        return newPerson;
     }
 
     // logic of update

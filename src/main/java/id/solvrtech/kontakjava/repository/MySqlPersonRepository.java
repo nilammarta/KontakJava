@@ -242,7 +242,7 @@ public class MySqlPersonRepository implements PersonRepository {
     }
 
     public boolean isPhoneNumberExists(String phoneNumber) {
-        String query = "SELECT * FROM persons WHERE phone = ?";
+        String query = "SELECT COUNT(*) FROM persons WHERE phone = ?";
 
         try {
             conn = mySqlconnection.createConnection();
@@ -252,7 +252,12 @@ public class MySqlPersonRepository implements PersonRepository {
             rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return true;
+                int count = rs.getInt(1);
+                if (count != 0) {
+                    return true;
+                } else {
+                  return false;
+                }
             } else {
                 return false;
             }
@@ -272,7 +277,7 @@ public class MySqlPersonRepository implements PersonRepository {
     }
 
     public boolean isPhoneNumberExists(String phoneNumber, int id) {
-        String query = "SELECT * FROM persons WHERE phone = ? AND id != ?";
+        String query = "SELECT COUNT(*) FROM persons WHERE phone = ? AND id != ?";
 
         try{
             conn = mySqlconnection.createConnection();
@@ -282,9 +287,14 @@ public class MySqlPersonRepository implements PersonRepository {
             stmt.setInt(2, id);
             rs = stmt.executeQuery();
 
-            if (rs.next()){
-                return true;
-            }else{
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                if (count != 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
                 return false;
             }
         }catch (SQLException e) {

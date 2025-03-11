@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * class helper for create general method
@@ -73,6 +75,14 @@ public class Helper {
         }
 
         return persons;
+    }
+
+    // validate the phone number
+    public static boolean validatePhoneNumber(String phoneNumber) {
+
+        Pattern pattern = Pattern.compile("^(\\+62|62|0)8[1-9][0-9]{5,12}$");
+        Matcher matcher = pattern.matcher(phoneNumber);
+        return matcher.matches();
     }
 
 }
