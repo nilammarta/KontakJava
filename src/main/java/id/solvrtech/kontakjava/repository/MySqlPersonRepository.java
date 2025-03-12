@@ -8,158 +8,189 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MySqlPersonRepository implements PersonRepository {
+public class MySqlPersonRepository extends BaseRepository<Person> implements PersonRepository {
 
 //     Menyiapkan objek yang diperlukan untuk mengelola database
     Connection conn;
     PreparedStatement stmt;
     ResultSet rs;
 
-    MysqlConnection mySqlconnection = new MysqlConnection();
+    MysqlConnection mySqlConnection = new MysqlConnection();
+
+    public MySqlPersonRepository() {
+        super(new MysqlConnection());
+    }
 
 
     public List<Person> getAll() {
-        String query = "SELECT * FROM persons";
+        return this.executeQueryForMultipleData("SELECT * FROM persons", null);
 
-        try {
-            conn = mySqlconnection.createConnection();
-            assert conn != null;
-            stmt = conn.prepareStatement(query);
-            rs = stmt.executeQuery();
-
-            List<Person> persons = new ArrayList<>();
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                String phoneNumber = rs.getString("phone");
-                Person person = new Person(id, name, phoneNumber);
-                persons.add(person);
-            }
-
-            return persons;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }finally {
-            if (conn != null) {
-                try {
-                    // close connection
-                    mySqlconnection.closeConnection(stmt, conn);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        //        String query = "SELECT * FROM persons";
+//        try {
+//            conn = mySqlConnection.createConnection();
+//            assert conn != null;
+//            stmt = conn.prepareStatement(query);
+//            rs = stmt.executeQuery();
+//
+//            List<Person> persons = new ArrayList<>();
+//            while (rs.next()) {
+//                int id = rs.getInt("id");
+//                String name = rs.getString("name");
+//                String phoneNumber = rs.getString("phone");
+//                Person person = new Person(id, name, phoneNumber);
+//                persons.add(person);
+//            }
+//
+//            return persons;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return null;
+//        }finally {
+//            if (conn != null) {
+//                try {
+//                    // close connection
+//                    mySqlConnection.closeConnection(stmt, conn);
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
     }
 
     public Person getById(int personId) {
-        String query = "SELECT * FROM persons WHERE id = ?";
+        return this.executeQueryForSingleData(
+                "SELECT * FROM persons WHERE id = ?",
+                new PreparedStatementSetter() {
+                   public void setValues(PreparedStatement stmt) throws SQLException {
+                       stmt.setInt(1, personId);
+                   }
+                });
 
-        try {
-            conn = mySqlconnection.createConnection();
-            assert conn != null;
-            stmt = conn.prepareStatement(query);
-            stmt.setInt(1, personId);
-            rs = stmt.executeQuery();
-            if (rs.next()) {
-                String name = rs.getString("name");
-                String phoneNumber = rs.getString("phone");
-                Person person = new Person(personId, name, phoneNumber);
-
-                return person;
-            }else{
-                return null;
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            if (conn != null) {
-                try {
-                    // close connection
-                    mySqlconnection.closeConnection(stmt, conn);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+//        String query = "SELECT * FROM persons WHERE id = ?";
+//
+//        try {
+//            conn = mySqlConnection.createConnection();
+//            assert conn != null;
+//            stmt = conn.prepareStatement(query);
+//            stmt.setInt(1, personId);
+//            rs = stmt.executeQuery();
+//            if (rs.next()) {
+//                String name = rs.getString("name");
+//                String phoneNumber = rs.getString("phone");
+//                Person person = new Person(personId, name, phoneNumber);
+//
+//                return person;
+//            }else{
+//                return null;
+//            }
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return null;
+//        } finally {
+//            if (conn != null) {
+//                try {
+//                    // close connection
+//                    mySqlConnection.closeConnection(stmt, conn);
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
     }
 
     public List<Person> getByName(String name) {
-        String query = "SELECT * FROM persons WHERE name LIKE ?";
-
-        try{
-            conn = mySqlconnection.createConnection();
-            stmt = conn.prepareStatement(query);
-            stmt.setString(1, "%" + name + "%");
-            rs = stmt.executeQuery();
-
-            List<Person> persons = new ArrayList<>();
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String theName = rs.getString("name");
-                String phoneNumber = rs.getString("phone");
-
-                Person person = new Person(id, theName, phoneNumber);
-                persons.add(person);
-            }
-            return persons;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }finally {
-            if (conn != null) {
-                try {
-                    // close connection
-                    mySqlconnection.closeConnection(stmt, conn);
-                } catch (SQLException e) {
-                    e.printStackTrace();
+        return this.executeQueryForMultipleData(
+                "SELECT * FROM persons WHERE name LIKE ?",
+                new PreparedStatementSetter() {
+                    public void setValues(PreparedStatement stmt) throws SQLException {
+                        stmt.setString(1, "%" + name + "%");
+                    }
                 }
-            }
-        }
+        );
+
+//        String query = "SELECT * FROM persons WHERE name LIKE ?";
+//
+//        try{
+//            conn = mySqlConnection.createConnection();
+//            stmt = conn.prepareStatement(query);
+//            stmt.setString(1, "%" + name + "%");
+//            rs = stmt.executeQuery();
+//
+//            List<Person> persons = new ArrayList<>();
+//            while (rs.next()) {
+//                int id = rs.getInt("id");
+//                String theName = rs.getString("name");
+//                String phoneNumber = rs.getString("phone");
+//
+//                Person person = new Person(id, theName, phoneNumber);
+//                persons.add(person);
+//            }
+//            return persons;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return null;
+//        }finally {
+//            if (conn != null) {
+//                try {
+//                    // close connection
+//                    mySqlConnection.closeConnection(stmt, conn);
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
     }
 
     public List<Person> getByPhone(String phone) {
-        String query = "SELECT * FROM persons WHERE phone LIKE ?";
-
-        try{
-            conn = mySqlconnection.createConnection();
-            stmt = conn.prepareStatement(query);
-            stmt.setString(1, "%" + phone + "%");
-            rs = stmt.executeQuery();
-
-            List<Person> persons = new ArrayList<>();
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String theName = rs.getString("name");
-                String phoneNumber = rs.getString("phone");
-
-                Person person = new Person(id, theName, phoneNumber);
-
-                persons.add(person);
-            }
-            return persons;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }finally {
-            if (conn != null) {
-                try {
-                    // close connection
-                    mySqlconnection.closeConnection(stmt, conn);
-                } catch (SQLException e) {
-                    e.printStackTrace();
+        return this.executeQueryForMultipleData(
+                "SELECT * FROM persons WHERE phone LIKE ?",
+                new PreparedStatementSetter() {
+                    public void setValues(PreparedStatement stmt) throws SQLException {
+                        stmt.setString(1, "%" + phone + "%");
+                    }
                 }
-            }
-        }
+        );
+
+//        String query = "SELECT * FROM persons WHERE phone LIKE ?";
+//
+//        try{
+//            conn = mySqlConnection.createConnection();
+//            stmt = conn.prepareStatement(query);
+//            stmt.setString(1, "%" + phone + "%");
+//            rs = stmt.executeQuery();
+//
+//            List<Person> persons = new ArrayList<>();
+//            while (rs.next()) {
+//                int id = rs.getInt("id");
+//                String theName = rs.getString("name");
+//                String phoneNumber = rs.getString("phone");
+//
+//                Person person = new Person(id, theName, phoneNumber);
+//
+//                persons.add(person);
+//            }
+//            return persons;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return null;
+//        }finally {
+//            if (conn != null) {
+//                try {
+//                    // close connection
+//                    mySqlConnection.closeConnection(stmt, conn);
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
     }
 
     public Person create(Person person) {
         String query = "INSERT INTO persons (name, phone) VALUES (?, ?)";
 
         try {
-            conn =mySqlconnection.createConnection();
+            conn = mySqlConnection.createConnection();
             assert conn != null;
             stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, person.getName());
@@ -181,7 +212,7 @@ public class MySqlPersonRepository implements PersonRepository {
             if (conn != null) {
                 try {
                     // close connection
-                    mySqlconnection.closeConnection(stmt, conn);
+                    mySqlConnection.closeConnection(stmt, conn);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -193,7 +224,7 @@ public class MySqlPersonRepository implements PersonRepository {
         String query = "UPDATE persons SET name = ?, phone = ? WHERE id = ?";
 
         try{
-            conn = mySqlconnection.createConnection();
+            conn = mySqlConnection.createConnection();
             assert conn != null;
             stmt = conn.prepareStatement(query);
             stmt.setString(1, person.getName());
@@ -209,7 +240,7 @@ public class MySqlPersonRepository implements PersonRepository {
             if (conn != null) {
                 try {
                     // close connection
-                    mySqlconnection.closeConnection(stmt, conn);
+                    mySqlConnection.closeConnection(stmt, conn);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -221,7 +252,7 @@ public class MySqlPersonRepository implements PersonRepository {
         String query = "DELETE FROM persons WHERE id = ?";
 
         try{
-            conn = mySqlconnection.createConnection();
+            conn = mySqlConnection.createConnection();
             assert conn != null;
             stmt = conn.prepareStatement(query);
             stmt.setInt(1, id);
@@ -232,7 +263,7 @@ public class MySqlPersonRepository implements PersonRepository {
             if (conn != null) {
                 try {
                     // close connection
-                    mySqlconnection.closeConnection(stmt, conn);
+                    mySqlConnection.closeConnection(stmt, conn);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -245,7 +276,7 @@ public class MySqlPersonRepository implements PersonRepository {
         String query = "SELECT COUNT(*) FROM persons WHERE phone = ?";
 
         try {
-            conn = mySqlconnection.createConnection();
+            conn = mySqlConnection.createConnection();
             assert conn != null;
             stmt = conn.prepareStatement(query);
             stmt.setString(1, phoneNumber);
@@ -268,7 +299,7 @@ public class MySqlPersonRepository implements PersonRepository {
             if (conn != null) {
                 try {
                     // close connection
-                    mySqlconnection.closeConnection(stmt, conn);
+                    mySqlConnection.closeConnection(stmt, conn);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -280,7 +311,7 @@ public class MySqlPersonRepository implements PersonRepository {
         String query = "SELECT COUNT(*) FROM persons WHERE phone = ? AND id != ?";
 
         try{
-            conn = mySqlconnection.createConnection();
+            conn = mySqlConnection.createConnection();
             assert conn != null;
             stmt = conn.prepareStatement(query);
             stmt.setString(1, phoneNumber);
@@ -303,10 +334,26 @@ public class MySqlPersonRepository implements PersonRepository {
         }finally {
             try {
                 // close connection
-                mySqlconnection.closeConnection(stmt, conn);
+                mySqlConnection.closeConnection(stmt, conn);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    protected Person mapToEntity(ResultSet resultSet) {
+        try {
+            if (resultSet != null) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String phoneNumber = resultSet.getString("phone");
+                Person person = new Person(id, name, phoneNumber);
+                return person;
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }
