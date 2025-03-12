@@ -187,37 +187,49 @@ public class MySqlPersonRepository extends BaseRepository<Person> implements Per
     }
 
     public Person create(Person person) {
-        String query = "INSERT INTO persons (name, phone) VALUES (?, ?)";
-
-        try {
-            conn = mySqlConnection.createConnection();
-            assert conn != null;
-            stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, person.getName());
-            stmt.setString(2, person.getPhoneNumber());
-            stmt.executeUpdate();
-
-            rs = stmt.getGeneratedKeys();
-            if (rs.next()) {
-                int id = rs.getInt(1);
-                person.setId(id);
-                return person;
-            }else{
-                return null;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }finally {
-            if (conn != null) {
-                try {
-                    // close connection
-                    mySqlConnection.closeConnection(stmt, conn);
-                } catch (SQLException e) {
-                    e.printStackTrace();
+        int id = this.executeCreate(
+                "INSERT INTO persons (name, phone) VALUES (?, ?)",
+                new PreparedStatementSetter() {
+                    public void setValues(PreparedStatement stmt) throws SQLException {
+                        stmt.setString(1, person.getName());
+                        stmt.setString(2, person.getPhoneNumber());
+                    }
                 }
-            }
-        }
+        );
+        System.out.println(id);
+        return getById(id);
+
+//        String query = "INSERT INTO persons (name, phone) VALUES (?, ?)";
+//
+//        try {
+//            conn = mySqlConnection.createConnection();
+//            assert conn != null;
+//            stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+//            stmt.setString(1, person.getName());
+//            stmt.setString(2, person.getPhoneNumber());
+//            stmt.executeUpdate();
+//
+//            rs = stmt.getGeneratedKeys();
+//            if (rs.next()) {
+//                int id = rs.getInt(1);
+//                person.setId(id);
+//                return person;
+//            }else{
+//                return null;
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return null;
+//        }finally {
+//            if (conn != null) {
+//                try {
+//                    // close connection
+//                    mySqlConnection.closeConnection(stmt, conn);
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
     }
 
     public Person update(Person person) {
