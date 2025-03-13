@@ -131,10 +131,11 @@ public class MySqlPersonRepository extends BaseRepository<Person> implements Per
         final int[] result = {0};
 
         this.executeQuery(
-                "SELECT COUNT(*) FROM persons WHERE phone = ?",
+                "SELECT COUNT(*) FROM persons WHERE phone = ? AND id != ?",
                 new PreparedStatementSetter() {
                     public void setValues(PreparedStatement stmt) throws SQLException {
                         stmt.setString(1, phoneNumber);
+                        stmt.setInt(2, id);
                     }
                 },
                 new ResultSetAction() {
@@ -152,6 +153,18 @@ public class MySqlPersonRepository extends BaseRepository<Person> implements Per
         }else{
             return true;
         }
+    }
+
+    public List<Person> getByNameOrPhone(String search) {
+        return this.executeQueryForMultipleData(
+                "SELECT * FROM persons WHERE LOWER(name) like ? OR phone like ?",
+                new PreparedStatementSetter() {
+                    public void setValues(PreparedStatement stmt) throws SQLException {
+                        stmt.setString(1, "%" + search.toLowerCase() + "%");
+                        stmt.setString(2, "%" + search + "%");
+                    }
+                }
+        );
     }
 
     @Override

@@ -28,4 +28,6 @@ public interface PersonRepository {
 
     // overloading isPhoneNumberExists untuk bagian edit person
     boolean isPhoneNumberExists(String phoneNumber, int id);
+
+    List<Person> getByNameOrPhone(String search);
 }

@@ -80,4 +80,12 @@ public class InMemoryPersonRepository implements PersonRepository {
         }
         return false;
     }
+
+    public List<Person> getByNameOrPhone(String search) {
+        return persons.stream()
+                .filter(person -> person.getName().toLowerCase().contains(search.toLowerCase()) ||
+                        person.getPhoneNumber().contains(search.toLowerCase()))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+    
 }

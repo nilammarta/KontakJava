@@ -74,19 +74,21 @@ public class PersonService {
     }
 
     public List<Person> searchPerson(String searchInput) {
-        if (searchInput.length() > 3 && searchInput.substring(0, 3).equals("+62")) {
-            searchInput = "0" + searchInput.substring(4);
-        }
+        return personRepository.getByNameOrPhone(searchInput);
 
-        List<Person> personsByName = personRepository.getByName(searchInput);
-        List<Person> personsByPhoneNumber = personRepository.getByPhone(searchInput);
-
-        if (personsByName.isEmpty() && personsByPhoneNumber.isEmpty()) {
-            return null;
-        }else if (!personsByPhoneNumber.isEmpty()) {
-            return personsByPhoneNumber;
-        }else{
-            return personsByName;
-        }
+//        if (searchInput.length() > 3 && searchInput.substring(0, 3).equals("+62")) {
+//            searchInput = "0" + searchInput.substring(4);
+//        }
+//
+//        List<Person> personsByName = personRepository.getByName(searchInput);
+//        List<Person> personsByPhoneNumber = personRepository.getByPhone(searchInput);
+//
+//        if (personsByName.isEmpty() && personsByPhoneNumber.isEmpty()) {
+//            return null;
+//        }else if (!personsByPhoneNumber.isEmpty()) {
+//            return personsByPhoneNumber;
+//        }else{
+//            return personsByName;
+//        }
     }
 }
