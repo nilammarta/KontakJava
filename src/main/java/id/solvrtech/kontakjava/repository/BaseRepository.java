@@ -82,7 +82,11 @@ public abstract class BaseRepository<T> {
                     }
                 }
         );
-        return entity.getFirst();
+        if (entity.size() > 0) {
+            return entity.getFirst();
+        }else {
+            return null;
+        }
     }
 
     /**
@@ -129,8 +133,13 @@ public abstract class BaseRepository<T> {
             if (setter != null) {
                 setter.setValues(stmt);
             }
-            return stmt.executeUpdate();
-//            return stmt.getGeneratedKeys();
+            stmt.executeUpdate();
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }else{
+                return 0;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return 0;

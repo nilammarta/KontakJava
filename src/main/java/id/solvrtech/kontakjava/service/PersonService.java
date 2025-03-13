@@ -35,6 +35,10 @@ public class PersonService {
     // logic of create
     public Person create(String name, String phoneNumber) {
 
+        if (phoneNumber.substring(0, 3).equals("+62")) {
+            phoneNumber = "0" + phoneNumber.substring(4);
+        }
+
         if (personRepository.isPhoneNumberExists(phoneNumber)) {
             return null;
         } else {
@@ -70,6 +74,10 @@ public class PersonService {
     }
 
     public List<Person> searchPerson(String searchInput) {
+        if (searchInput.length() > 3 && searchInput.substring(0, 3).equals("+62")) {
+            searchInput = "0" + searchInput.substring(4);
+        }
+
         List<Person> personsByName = personRepository.getByName(searchInput);
         List<Person> personsByPhoneNumber = personRepository.getByPhone(searchInput);
 
