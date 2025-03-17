@@ -3,19 +3,12 @@ package id.solvrtech.kontakjava.repository;
 import id.solvrtech.kontakjava.model.Person;
 import id.solvrtech.kontakjava.utils.MysqlConnection;
 
-import java.sql.*;
-import java.util.ArrayList;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 
 public class MySqlPersonRepository extends BaseRepository<Person> implements PersonRepository {
-
-    //     Menyiapkan objek yang diperlukan untuk mengelola database
-    Connection conn;
-    PreparedStatement stmt;
-    ResultSet rs;
-
-    MysqlConnection mySqlConnection = new MysqlConnection();
 
     public MySqlPersonRepository() {
         super(new MysqlConnection());
@@ -29,21 +22,13 @@ public class MySqlPersonRepository extends BaseRepository<Person> implements Per
     public Person getById(int personId) {
         return this.executeQueryForSingleData(
                 "SELECT * FROM persons WHERE id = ?",
-                new PreparedStatementSetter() {
-                    public void setValues(PreparedStatement stmt) throws SQLException {
-                        stmt.setInt(1, personId);
-                    }
-                });
+                stmt -> stmt.setInt(1, personId));
     }
 
     public List<Person> getByName(String name) {
         return this.executeQueryForMultipleData(
                 "SELECT * FROM persons WHERE name LIKE ?",
-                new PreparedStatementSetter() {
-                    public void setValues(PreparedStatement stmt) throws SQLException {
-                        stmt.setString(1, "%" + name + "%");
-                    }
-                }
+                stmt -> stmt.setString(1, "%" + name + "%")
         );
 
     }
@@ -51,11 +36,7 @@ public class MySqlPersonRepository extends BaseRepository<Person> implements Per
     public List<Person> getByPhone(String phone) {
         return this.executeQueryForMultipleData(
                 "SELECT * FROM persons WHERE phone LIKE ?",
-                new PreparedStatementSetter() {
-                    public void setValues(PreparedStatement stmt) throws SQLException {
-                        stmt.setString(1, "%" + phone + "%");
-                    }
-                }
+                stmt -> stmt.setString(1, "%" + phone + "%")
         );
 
     }
@@ -63,11 +44,9 @@ public class MySqlPersonRepository extends BaseRepository<Person> implements Per
     public Person create(Person person) {
         int id = this.executeCreate(
                 "INSERT INTO persons (name, phone) VALUES (?, ?)",
-                new PreparedStatementSetter() {
-                    public void setValues(PreparedStatement stmt) throws SQLException {
-                        stmt.setString(1, person.getName());
-                        stmt.setString(2, person.getPhoneNumber());
-                    }
+                stmt -> {
+                    stmt.setString(1, person.getName());
+                    stmt.setString(2, person.getPhoneNumber());
                 }
         );
         return getById(id);
@@ -77,12 +56,10 @@ public class MySqlPersonRepository extends BaseRepository<Person> implements Per
     public Person update(Person person) {
         this.executeUpdate(
                 "UPDATE persons SET name = ?, phone = ? WHERE id = ?",
-                new PreparedStatementSetter() {
-                    public void setValues(PreparedStatement stmt) throws SQLException {
-                        stmt.setString(1, person.getName());
-                        stmt.setString(2, person.getPhoneNumber());
-                        stmt.setInt(3, person.getId());
-                    }
+                stmt -> {
+                    stmt.setString(1, person.getName());
+                    stmt.setString(2, person.getPhoneNumber());
+                    stmt.setInt(3, person.getId());
                 }
         );
         return getById(person.getId());
@@ -91,11 +68,7 @@ public class MySqlPersonRepository extends BaseRepository<Person> implements Per
     public void deleteById(int id) {
         this.executeDelete(
                 "DELETE FROM persons WHERE id = ?",
-                new PreparedStatementSetter() {
-                    public void setValues(PreparedStatement stmt) throws SQLException {
-                        stmt.setInt(1, id);
-                    }
-                }
+                stmt -> stmt.setInt(1, id)
         );
 
     }
@@ -105,24 +78,17 @@ public class MySqlPersonRepository extends BaseRepository<Person> implements Per
 
         this.executeQuery(
                 "SELECT COUNT(*) FROM persons WHERE phone = ?",
-                new PreparedStatementSetter() {
-                    public void setValues(PreparedStatement stmt) throws SQLException {
-                        stmt.setString(1, phoneNumber);
-                    }
-                },
-                new ResultSetAction() {
-                    @Override
-                    public void perform(ResultSet resultSet) throws SQLException {
-                        if (resultSet.next()) {
-                            result[0] = resultSet.getInt(1);
-                        }
+                stmt -> stmt.setString(1, phoneNumber),
+                resultSet -> {
+                    if (resultSet.next()) {
+                        result[0] = resultSet.getInt(1);
                     }
                 }
         );
 
         if (result[0] == 0) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
@@ -132,25 +98,20 @@ public class MySqlPersonRepository extends BaseRepository<Person> implements Per
 
         this.executeQuery(
                 "SELECT COUNT(*) FROM persons WHERE phone = ? AND id != ?",
-                new PreparedStatementSetter() {
-                    public void setValues(PreparedStatement stmt) throws SQLException {
-                        stmt.setString(1, phoneNumber);
-                        stmt.setInt(2, id);
-                    }
+                stmt -> {
+                    stmt.setString(1, phoneNumber);
+                    stmt.setInt(2, id);
                 },
-                new ResultSetAction() {
-                    @Override
-                    public void perform(ResultSet resultSet) throws SQLException {
-                        if (resultSet.next()) {
-                            result[0] = resultSet.getInt(1);
-                        }
+                resultSet -> {
+                    if (resultSet.next()) {
+                        result[0] = resultSet.getInt(1);
                     }
                 }
         );
 
         if (result[0] == 0) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
@@ -158,11 +119,9 @@ public class MySqlPersonRepository extends BaseRepository<Person> implements Per
     public List<Person> getByNameOrPhone(String search) {
         return this.executeQueryForMultipleData(
                 "SELECT * FROM persons WHERE LOWER(name) like ? OR phone like ?",
-                new PreparedStatementSetter() {
-                    public void setValues(PreparedStatement stmt) throws SQLException {
-                        stmt.setString(1, "%" + search.toLowerCase() + "%");
-                        stmt.setString(2, "%" + search + "%");
-                    }
+                stmt -> {
+                    stmt.setString(1, "%" + search.toLowerCase() + "%");
+                    stmt.setString(2, "%" + search + "%");
                 }
         );
     }
@@ -171,11 +130,9 @@ public class MySqlPersonRepository extends BaseRepository<Person> implements Per
     protected Person mapToEntity(ResultSet resultSet) {
         try {
             if (resultSet != null) {
-                int id = resultSet.getInt("id");
-                String name = resultSet.getString("name");
-                String phoneNumber = resultSet.getString("phone");
-                Person person = new Person(id, name, phoneNumber);
-                return person;
+                return new Person(resultSet.getInt("id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("phone"));
             }
         } catch (SQLException e) {
             e.printStackTrace();

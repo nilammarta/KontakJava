@@ -2,9 +2,7 @@ package id.solvrtech.kontakjava.repository;
 
 import id.solvrtech.kontakjava.model.Person;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * interface for persons repository

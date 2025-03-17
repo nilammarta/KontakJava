@@ -6,7 +6,6 @@ public class MysqlConnection {
     private static final String DB_URL = "jdbc:mysql://localhost:33061/kontakjavadb";
     private static final String USER = "root";
     private static final String PASS = "password";
-//    private static final Connection CONNECTION = createConnection();
 
     public Connection createConnection() {
         try {

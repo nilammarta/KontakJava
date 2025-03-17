@@ -1,9 +1,7 @@
 package id.solvrtech.kontakjava.repository;
 
-import id.solvrtech.kontakjava.model.Person;
 import id.solvrtech.kontakjava.utils.MysqlConnection;
 
-import java.beans.PropertyEditorSupport;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +36,20 @@ public abstract class BaseRepository<T> {
         PreparedStatement stmt = null;
         try {
             conn = mysqlConnection.createConnection();
-            assert conn != null;
+
+//            Mengganti assert dapat dilakukan seperti code dibawah ini:
+//            assert conn != null;
+            if (conn == null) throw new SQLException("Error, Connection was null");
+
             stmt = conn.prepareStatement(query);
             if (setter != null) {
                 setter.setValues(stmt);
             }
             ResultSet rs = stmt.executeQuery();
-            action.perform(rs);
+
+            if (action != null) {
+                action.perform(rs);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -103,11 +108,9 @@ public abstract class BaseRepository<T> {
         executeQuery(
                 query,
                 setter,
-                new ResultSetAction() {
-                    public void perform(ResultSet resultSet) throws SQLException {
-                        while (resultSet.next()) {
-                            data.add(mapToEntity(resultSet));
-                        }
+                resultSet -> {
+                    while (resultSet.next()) {
+                        data.add(mapToEntity(resultSet));
                     }
                 }
         );

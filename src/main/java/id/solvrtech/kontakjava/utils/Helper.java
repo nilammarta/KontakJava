@@ -2,11 +2,7 @@ package id.solvrtech.kontakjava.utils;
 
 import id.solvrtech.kontakjava.model.Person;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

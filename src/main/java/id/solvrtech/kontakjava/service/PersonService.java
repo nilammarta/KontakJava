@@ -1,16 +1,10 @@
 package id.solvrtech.kontakjava.service;
 
 import id.solvrtech.kontakjava.model.Person;
-import id.solvrtech.kontakjava.repository.InMemoryPersonRepository;
-//import id.solvrtech.kontakjava.repository.MySqlPersonRepository;
 import id.solvrtech.kontakjava.repository.MySqlPersonRepository;
 import id.solvrtech.kontakjava.repository.PersonRepository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import static id.solvrtech.kontakjava.utils.Helper.validatePhoneNumber;
 
 /**
  * class person service to create CRUD logic of person data
@@ -74,21 +68,11 @@ public class PersonService {
     }
 
     public List<Person> searchPerson(String searchInput) {
-        return personRepository.getByNameOrPhone(searchInput);
 
-//        if (searchInput.length() > 3 && searchInput.substring(0, 3).equals("+62")) {
-//            searchInput = "0" + searchInput.substring(4);
-//        }
-//
-//        List<Person> personsByName = personRepository.getByName(searchInput);
-//        List<Person> personsByPhoneNumber = personRepository.getByPhone(searchInput);
-//
-//        if (personsByName.isEmpty() && personsByPhoneNumber.isEmpty()) {
-//            return null;
-//        }else if (!personsByPhoneNumber.isEmpty()) {
-//            return personsByPhoneNumber;
-//        }else{
-//            return personsByName;
-//        }
+        if (searchInput.length() > 3 && searchInput.substring(0, 3).equals("+62")) {
+            searchInput = "0" + searchInput.substring(4);
+        }
+
+        return personRepository.getByNameOrPhone(searchInput);
     }
 }
