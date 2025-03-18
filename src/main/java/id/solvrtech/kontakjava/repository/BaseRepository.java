@@ -8,10 +8,12 @@ import java.util.List;
 
 public abstract class BaseRepository<T> {
 
-    // or any database connection wrapper class that you use.
     protected MysqlConnection mysqlConnection;
 
-    // Connection of database
+    /**
+     * Construct for the database Connection
+     * @param mysqlConnection
+     */
     public BaseRepository(MysqlConnection mysqlConnection) {
         this.mysqlConnection = mysqlConnection;
     }
@@ -30,15 +32,11 @@ public abstract class BaseRepository<T> {
      * @param query  String
      * @param setter {@link PreparedStatementSetter}
      */
-
     protected void executeQuery(String query, PreparedStatementSetter setter, ResultSetAction action) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
             conn = mysqlConnection.createConnection();
-
-//            Mengganti assert dapat dilakukan seperti code dibawah ini:
-//            assert conn != null;
             if (conn == null) throw new SQLException("Error, Connection was null");
 
             stmt = conn.prepareStatement(query);
@@ -71,10 +69,8 @@ public abstract class BaseRepository<T> {
      * @param setter {@link PreparedStatementSetter}
      * @return T
      */
-
     protected T executeQueryForSingleData(String query, PreparedStatementSetter setter) {
         List<T> entity = new ArrayList<>();
-//        final T[] entity = new Object[]{new T()};
         executeQuery(
                 query,
                 setter,
@@ -101,7 +97,6 @@ public abstract class BaseRepository<T> {
      * @param setter {@link PreparedStatementSetter}
      * @return list of T
      */
-
     protected List<T> executeQueryForMultipleData(String query, PreparedStatementSetter setter) {
         List<T> data = new ArrayList<>();
 
@@ -125,7 +120,6 @@ public abstract class BaseRepository<T> {
      * @param setter {@link PreparedStatementSetter}
      * @return last generated ID of the SQL insert query
      */
-
     protected int executeCreate(String query, PreparedStatementSetter setter) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -164,7 +158,6 @@ public abstract class BaseRepository<T> {
      * @param query  String
      * @param setter {@link PreparedStatementSetter}
      */
-
     protected void executeUpdate(String query, PreparedStatementSetter setter) {
         Connection conn = null;
         PreparedStatement stmt = null;

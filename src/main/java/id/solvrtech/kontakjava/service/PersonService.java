@@ -17,16 +17,30 @@ public class PersonService {
 //     Dengan menyimpan data di database
     private final PersonRepository personRepository = new MySqlPersonRepository();
 
+    /**
+     * Get all data from database
+     * @return List of Person
+     */
     public List<Person> getAll() {
         return personRepository.getAll();
     }
 
-    // get the person daya based on their id
+
+    /**
+     * Get the person data based on their id
+     * @param id
+     * @return data with type Person
+     */
     public Person getById(int id) {
         return personRepository.getById(id);
     }
 
-    // logic of create
+    /**
+     * Create new person data and save into databse
+     * @param name
+     * @param phoneNumber
+     * @return data with type Person
+     */
     public Person create(String name, String phoneNumber) {
 
         if (phoneNumber.substring(0, 3).equals("+62")) {
@@ -45,7 +59,13 @@ public class PersonService {
         }
     }
 
-    // logic of update
+    /**
+     *
+     * @param personEdit
+     * @param newName
+     * @param newPhoneNumber
+     * @return data with type Person
+     */
     public Person update(Person personEdit, String newName, String newPhoneNumber) {
 
         if (personRepository.isPhoneNumberExists(newPhoneNumber, personEdit.getId())) {
@@ -57,7 +77,11 @@ public class PersonService {
         return personRepository.update(personEdit);
     }
 
-    // logic of delete
+    /**
+     * Remove data in database based on their ID
+     * @param id
+     * @return void
+     */
     public String delete(int id) {
         try {
             personRepository.deleteById(id);
@@ -67,6 +91,11 @@ public class PersonService {
         }
     }
 
+    /**
+     * Search person data by their name or phone number
+     * @param searchInput
+     * @return List of Person data that matching with search input
+     */
     public List<Person> searchPerson(String searchInput) {
 
         if (searchInput.length() > 3 && searchInput.substring(0, 3).equals("+62")) {

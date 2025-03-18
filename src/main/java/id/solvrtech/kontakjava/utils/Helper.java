@@ -11,7 +11,11 @@ import java.util.regex.Pattern;
  * class helper for create general method
  */
 public class Helper {
-    // ask input as string
+    /**
+     * Method for read input from terminal as String
+     * @param message
+     * @return void
+     */
     public static String readInputAsString(String message) {
         try {
             Scanner scanner = new Scanner(System.in);
@@ -24,7 +28,11 @@ public class Helper {
         }
     }
 
-    // ask input as int (for phone number)
+    /**
+     * Method for read input from terminal as int
+     * @param message
+     * @return void
+     */
     public static int readInputAsInt(String message) {
         try {
             Scanner scanner = new Scanner(System.in);
@@ -39,7 +47,9 @@ public class Helper {
         }
     }
 
-    // press enter method
+    /**
+     * Method for press Enter to continue the menu
+     */
     public static void pressEnterToContinue() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Press Enter to continue...");
@@ -47,6 +57,11 @@ public class Helper {
         System.out.println(" ");
     }
 
+    /**
+     * Validate if the input is numeric or not
+     * @param input
+     * @return boolean, True if it's numeric and otherwise
+     */
     public static boolean isInputNumeric(String input) {
         if(!input.isEmpty()) {
             return input.chars().allMatch(Character::isDigit);
@@ -55,6 +70,11 @@ public class Helper {
         }
     }
 
+    /**
+     * Method helper to showing (print out) data
+     * @param persons
+     * @return List of Person
+     */
     public static List<Person> showData(List<Person> persons) {
         if (persons != null && persons.size() != 0) {
             int i = 1;
@@ -73,7 +93,11 @@ public class Helper {
         return persons;
     }
 
-    // validate the phone number
+    /**
+     * Method helper to validate the phone number format
+     * @param phoneNumber
+     * @return boolean, TRUE if the phone number id valid, and otherwise
+     */
     public static boolean validatePhoneNumber(String phoneNumber) {
 
         Pattern pattern = Pattern.compile("^(\\+62|62|0)8[1-9][0-9]{5,12}$");
